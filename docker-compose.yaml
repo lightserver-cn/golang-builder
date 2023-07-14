@@ -1,0 +1,23 @@
+version: "3"
+services:
+  ${BINARY}_${ENV}:
+    image: golang1.20-alpine3.18:latest
+    container_name: "${BINARY}_${ENV}"
+    command:
+      - /usr/local/bin/${BINARY}
+    environment:
+      - GOPROXY=https://goproxy.cn,direct
+      - GO111MODULE=on
+      - ENV=${ENV}
+      - TIMEZONE=${TIMEZONE}
+    ports:
+      - ${PORT}:9002
+    restart: always
+    volumes:
+      - ./${BINARY}:/usr/local/bin/${BINARY}:ro
+    networks:
+      - ${BINARY}-${ENV}
+
+networks:
+  ${BINARY}-${ENV}:
+    driver: bridge
